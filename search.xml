@@ -4,11 +4,99 @@
   
     
     <entry>
+      <title>机器学习中常见的散度距离</title>
+      <link href="/2021/12/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%A3%E5%BA%A6%E8%B7%9D%E7%A6%BB/"/>
+      <url>/2021/12/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%A3%E5%BA%A6%E8%B7%9D%E7%A6%BB/</url>
+      
+        <content type="html"><![CDATA[<h1 id="机器学习中的常见散度距离"><a href="#机器学习中的常见散度距离" class="headerlink" title="机器学习中的常见散度距离"></a>机器学习中的常见散度距离</h1><h2 id="F-散度"><a href="#F-散度" class="headerlink" title="F-散度"></a>F-散度</h2><p>散度是用来衡量两个概率密度p，q区别的函数，即两个分布之间的相似程度：<br>$$ D_f(p||q)=\int q(x)f(\frac{p(x)}{q(x)})dx$$<br>这里$f$需要满足2个条件：$f$是凸函数 $f(1)=0$<br>由Jensen不等式可知$E(f(x))&gt;=f(E(x))$<br>$$ D_f(p||q)=\int q(x)f(\frac{p(x)}{q(x)})dx \geq f(\int q(x)\frac{p(x)}{q(x)}dx)=f(1)=0$$</p><h2 id="KL散度"><a href="#KL散度" class="headerlink" title="KL散度"></a>KL散度</h2><p>Kl散度是F-散度的一个特例，$f(x)=xlogx$的时候<br>$$D_{KL}(p||q)=p(x)log(\frac{p(x)}{q(x)})dx$$</p><ul><li>KL散度不满足对称性，并不是一个真正的距离度量</li><li>KL散度不满足三角不等式</li><li>范围$[0,+\infty]$<h2 id="JS散度"><a href="#JS散度" class="headerlink" title="JS散度"></a>JS散度</h2>JS散度是一种对称的衡量两个分布相似性的度量方式<br>$$D_{JS}(p||q)=\frac{1}{2}D_{KL}(p,m)+\frac{1}{2}D_{KL}(q,m)$$<br>其中$m=\frac{1}{2}(p+q)$</li><li>范围$[0,log2]$ </li></ul><p><strong>JS散度以及KL散度都存在一个问题，就是如果两个分布P和q没有重叠或者重叠非常少时，KL散度和JS散度都很难衡量两个分布之间的距离，KL散度的值没有意义，JS散度的值一直是一个常数，这在学习算法中意味着这一点的梯度为0，导致梯度消失</strong></p><h2 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a>交叉熵</h2><p>对于分布为$p(x)$的随机变量，熵$H(p)$表示其最优的编码长度，交叉熵是按照概率分布q的最优编码对真实分布为$p$的信息进行编码的长度，定义为<br>$$H(p,q)=E_p[-logq(x)])=-\sum_x p(x)logq(x)$$</p><h2 id="距离"><a href="#距离" class="headerlink" title="距离"></a>距离</h2><p>首先满足距离度量的三个条件：</p><ul><li>正定性：若$x\not ={y}, d(x,y)&gt;0,d(x,x)=0$</li><li>对称性：$d(x,y)=d(y,x)$</li><li>三角不等式：$d(x,y)\leq d(x,z)+d(z,y)$</li></ul><h2 id="欧式距离"><a href="#欧式距离" class="headerlink" title="欧式距离"></a>欧式距离</h2><p>$$D_E(x,y)=\sqrt{(x-y)^T\mathbf{I}(x-y)}$$<br>其中$\mathbf{(I)}$为单位对角矩阵，<strong>欧式距离测量的是不同维度之间的独立性</strong><br>然而在很多情况下都不合理，例如身高和体重这两个不同维度的特性是有关联的，同时他们的尺度也是不相同的，为了克服上述两个问题就出现了马氏距离。</p><h2 id="马氏距离"><a href="#马氏距离" class="headerlink" title="马氏距离"></a>马氏距离</h2><p>马氏距离考虑各种特征之间的关联，并且是尺度无关的，即独立于测量的尺度。<br>$$D_M(x,y)=\sqrt{(x-y)^T\Sigma^{-1}(x-y)}$$<br>其中$\Sigma$是多维随机变量的协方差矩阵。</p><h2 id="Wasserstein距离"><a href="#Wasserstein距离" class="headerlink" title="Wasserstein距离"></a>Wasserstein距离</h2><p>对于两个分布$q_1,q_2$,$p^{th}-Wasserstein距离定义为$：<br>$$ W_p(q_1,q_2)=(\inf_{\gamma(x,y) \in \Gamma(q_1,q_2)}\mathbb{E}_{(x,y)\thicksim\gamma(x,y)}[d(x,y)^p])^{\frac{1}{p}}$$<br>其中$\Gamma(q_1,q_2)$ 是边际分布为$q_1$和$q_2$的所有可能的联合分布集合，从x搬到y的距离就是$d(x,y)$<br>Wasserstein距离比KL散度以及JS散度的优势在于：即使两个分布没有重叠或者重叠部分比较少，Wasserstein距离仍然能够反映两个分布之间的距离。  </p><h2 id="MMD-Maximum-Mean-Discrepancy-最大均值差异"><a href="#MMD-Maximum-Mean-Discrepancy-最大均值差异" class="headerlink" title="MMD(Maximum Mean Discrepancy)最大均值差异"></a>MMD(Maximum Mean Discrepancy)最大均值差异</h2><p>对于一些复杂的、高维的随机变量，我们无法给出它们的分布函数，此时可以使用<em>矩</em>来描述一个随机变量，如果两个分布的均值和方差都相同的话，它们应该是比较相似的，但是很明显，均值和方差并不能完全代表一个分布，这个时候就需要更高阶的矩来描述一个分布。<br>MMD的基本思想就是如果两个随机变量的任一阶都相同的话，那么两个分布就是一致的。而当两个分布不相同的话，那么使得两个分布之间差异最大的那个矩应该被用来度量两个分布的标准。<br>定义如下：<br>$$MMD[F,p,q]=\sup_{||f||_\mathcal{H}\leq1}E_p[f(x)]-E_q[f(y)]$$<br>函数$f$在再生希尔伯特空间中的范数应该小于等于1.<br>如何获得一个随机变量的高阶矩呢？使用<strong>核函数</strong>。<br>比如在SVM中有高斯核函数，它对应的映射函数敲好可以映射到无穷维上，映射到无穷维上再求期望，正好可以得到随机变量的高阶矩，这个方法叫做<em>kernel embeeding of distribution</em>,也可以理解为将一个分布映射到再生希尔伯特空间上的一个点(每一个核函数都对应一个RKHS)，<strong>这样两个分布之间的距离就可以用两个点的内积进行表示</strong>。<br><img src=Snipaste_2021-12-15_21-45-42.png width=80% /><br>那么随机变量经过映射$f$之后，期望就可以表示为：<br><img src=Snipaste_2021-12-15_21-56-41.png width=80% /><br>第二个等号利用的是RKHS的再生性，就是RKHS中的$f(x)$都可以写成一个无穷维的向量$k(x,.)$与基底向量$f$的内积；第三个等号利用的是内积的性质，最后一个等号$\mu_p$表示的就是<em>kernel mean embedding</em><br>$$\mu_p=\int_\mathcal{X}p(dx)k(x,.)$$<br>表示的意思就是将$x$利用$k(x,.)$映射刀到无穷维上，然后在每一个维度上都求期望。</p><h2 id="MMD的数学简化"><a href="#MMD的数学简化" class="headerlink" title="MMD的数学简化"></a>MMD的数学简化</h2><p><a href="https://zhuanlan.zhihu.com/p/163839117">数学简化</a><br><img src=Snipaste_2021-12-16_09-54-56.png width=80%></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 基础知识 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 机器学习 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2021/12/15/hello-world/"/>
+      <url>/2021/12/15/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 代码 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 工作 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>神经网络域对抗训练</title>
+      <link href="/2021/12/09/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%9F%E5%AF%B9%E6%8A%97%E8%AE%AD%E7%BB%83/"/>
+      <url>/2021/12/09/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%9F%E5%AF%B9%E6%8A%97%E8%AE%AD%E7%BB%83/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Domain-Adversarial-Training-of-Neural-Networks"><a href="#Domain-Adversarial-Training-of-Neural-Networks" class="headerlink" title="Domain-Adversarial Training of Neural Networks"></a>Domain-Adversarial Training of Neural Networks</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><ol><li>为了实现有效的domain transfer, 必须基于不能区分源域与目标域的特征来进行预测</li><li>对源域上的主要学习任务进行区分，对域之间的转换不进行区分</li></ol><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>目标是将域适应嵌入到学习表示的过程中，以便最终的分类决策是基于对域变化具有区别性和不变性的特征，即在源域以及目标域中都具有相同或者非常相似的分布的特征。<br>This is achieved by jointly optimizing the underlying features as well as two discriminative classifiers operating on thses features:</p><ul><li>标签预测器，预测类别标签，在训练以及测试时都使用</li><li>区分源域以及目标域的域分类器在训练过程中使用</li></ul><p><strong>在优化两个分类器参数以最小化其对训练集的误差的同时，优化深层特征映射器参数以最小化标签分类器的损失和最大限度的提高域分类器的损失。</strong><br>这种对抗的优化方式，鼓励在优化过程中出现域不变的特征。所有的三个训练过程都可以嵌入到一个适当组成的深度前馈神经网络中，称为DANN。</p><h2 id="Domain-Adaptation"><a href="#Domain-Adaptation" class="headerlink" title="Domain Adaptation"></a>Domain Adaptation</h2><ol><li><a href="https://www.codenong.com/cs105797753/#:~:text=H-divergence%E7%94%A8%E6%9D%A5%E8%A1%A1%E9%87%8F%E4%B8%A4%E4%B8%AAdomain%E4%B9%8B%E9%97%B4%E7%9A%84%E8%B7%9D%E7%A6%BB%EF%BC%8C%E6%88%91%E4%BB%AC%E5%9C%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%B8%8C%E6%9C%9B%E7%9A%84%E6%98%AFsource%20domain%E4%B8%8Etarget%20domain%E4%B9%8B%E9%97%B4%E7%9A%84%E8%B7%9D%E7%A6%BB%E8%B6%8A%E5%B0%8F%E8%B6%8A%E5%A5%BD%EF%BC%8C%E8%BF%99%E5%B0%B1%E6%84%8F%E5%91%B3%E7%9D%80%E4%B8%A4%E4%B8%AAdomain%E4%B9%8B%E9%97%B4%E7%9A%84%E7%95%8C%E9%99%90%E5%B7%B2%E7%BB%8F%E5%87%A0%E4%B9%8E%E4%B8%8D%E5%AD%98%E5%9C%A8%EF%BC%8C%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4%E4%B8%8D%E7%AE%A1%E4%BD%BF%E7%94%A8%E4%BB%BB%E4%BD%95%E5%88%86%E7%B1%BB%E5%99%A8%E9%83%BD%E6%97%A0%E6%B3%95%E5%B0%86%E4%B8%A4%E4%B8%AAdomain%E5%88%86%E5%BC%80%EF%BC%8C%E8%BF%99%E5%B0%B1%E6%98%AF%E6%88%91%E4%BB%AC%E6%9C%80%E6%9C%9F%E5%BE%85%E7%9A%84%E7%BB%93%E6%9E%9C%E3%80%82.%20%E6%88%91%E4%BB%AC%E7%94%A8x%E8%A1%A8%E7%A4%BA%E4%B8%80%E4%B8%AA%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F%EF%BC%8C%E9%80%89%E6%8B%A9%E4%B8%80%E4%B8%AA%E5%88%86%E7%B1%BB%E5%87%BD%E6%95%B0h1%EF%BC%88x%EF%BC%89%EF%BC%8C%E5%A6%82%E6%9E%9Cx%E6%9D%A5%E8%87%AAsource%20domain%EF%BC%8C%E6%A0%87%E8%AE%B0%E7%BB%93%E6%9E%9C%E4%B8%BA0%EF%BC%8C%E5%A6%82%E6%9E%9C%E6%9D%A5%E8%87%AAtarget%20domain%EF%BC%8C%E6%A0%87%E8%AE%B0%E7%BB%93%E6%9E%9C%E4%B8%BA1%E3%80%82.%20%E5%9C%A8%E2%80%9Cdomain%20adaptive,R-CNN%20for%20object%20detection%20in%20the%20wild%22%E4%B8%80%E6%96%87%E4%B8%AD%EF%BC%8C%E5%AF%B9%E4%BA%8EH-divergence%E6%9C%89%E8%BF%99%E6%A0%B7%E7%9A%84%E8%A1%A8%E8%BF%B0%EF%BC%9A.%20%E6%88%91%E4%BB%AC%E6%89%80%E6%9C%9F%E6%9C%9B%E7%9A%84%E7%BB%93%E6%9E%9C%EF%BC%9A."> $\mathcal{H}$-divergence </a></li></ol><h2 id="DANN"><a href="#DANN" class="headerlink" title="DANN"></a>DANN</h2><p>为了学习一个可以很好地从一个域推广到另一个域的模型，我们确保神经网络的内部表示不包含关于输入来源（源域或者目标域）的歧视性信息，同时保持源域（标记）示例的低风险。<br>At training time, in order to obtain domain-invariant features, we seek the parpmeters $\theta_f$ of the feature mapping that <em>maximize</em> the loss of the domain classifier (by making the two feature distributions as similar as possible), while simultaneously seeking the parameters $\theta_d$ of the domain classifer that <em>minimize</em> the loss of the domain classifer. </p><blockquote><p>深度学习中的图像数据集分布的理解：<br>举例来说，一维的数据点的分布是可以想象的到的，那么图像也可以类比，一张图像假设分辨率是256<em>256，那么它就是256</em>256*3的高维空间中的一个点，这个点是客观存在的，那么一堆图像组成的数据集不就是高维空间中的一堆点嘛，它们是符合一定的分布的。数据分布不一致可以用数据集的整体内容或者数据集的特点等词来代替，比如从一个欧洲人人脸数据集和你学校人脸数据集中找一张和你最接近的人脸图像，显然，更容易从学校人脸数据集中找到，因为欧洲人人脸数据集的分布与学校人脸数据集的分布是不一致的，或者说在高维空间中，你的人脸图像这一个点距离欧洲人数据集离散数据点比较远。<br>DA的种类</p></blockquote><ul><li>基于特征的自适应：将源域目标和目标域的目标样本利用一个映射$\Phi$调整到同一个特征空间，这样在这个特征空间中样本可以“对齐”，这也是最常用的方法；</li><li>基于实例的自适应：考虑到源域中总有一些样本和目标域样本是很相似的，那么就将源域的所有样本的算是在训练时都乘以一个权重$w_i$,和目标域相似的样本这个权重就越大</li><li>基于模型参数的自适应：找到新的参数$\theta’$,通过参数的迁移使得模型能够更好地在目标域上工作。</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 迁移学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 域自适应 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>RNN</title>
+      <link href="/2021/12/07/RNN/"/>
+      <url>/2021/12/07/RNN/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>CRN-反事实循环神经网络</title>
       <link href="/2021/12/06/CRN-%E5%8F%8D%E4%BA%8B%E5%AE%9E%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
       <url>/2021/12/06/CRN-%E5%8F%8D%E4%BA%8B%E5%AE%9E%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
       
-        <content type="html"><![CDATA[<h1 id="ESTIMATING-COUNTERFACTUAL-TREATMENT-OUTCOMES-OVER-TIME-THROUGH-ADVERSARIALLY-BALANCED-REPRESENTATIONS-通过对抗平衡表示来估计一段时间内的反事实治疗结果"><a href="#ESTIMATING-COUNTERFACTUAL-TREATMENT-OUTCOMES-OVER-TIME-THROUGH-ADVERSARIALLY-BALANCED-REPRESENTATIONS-通过对抗平衡表示来估计一段时间内的反事实治疗结果" class="headerlink" title="ESTIMATING COUNTERFACTUAL TREATMENT OUTCOMES OVER TIME THROUGH ADVERSARIALLY BALANCED REPRESENTATIONS (通过对抗平衡表示来估计一段时间内的反事实治疗结果)"></a>ESTIMATING COUNTERFACTUAL TREATMENT OUTCOMES OVER TIME THROUGH ADVERSARIALLY BALANCED REPRESENTATIONS (通过对抗平衡表示来估计一段时间内的反事实治疗结果)</h1><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><ul><li><h3 id="解决的问题："><a href="#解决的问题：" class="headerlink" title="解决的问题："></a>解决的问题：</h3></li></ul><ol><li>Identifying <strong>when</strong> to give treatments to patients</li><li>how to select among multiple treatment <strong>over time</strong></li></ol><ul><li><h3 id="提出模型："><a href="#提出模型：" class="headerlink" title="提出模型："></a>提出模型：</h3>Counterfactual Recurrent Neteork (RCN) to estimate treatment effects over time and answer such medical questions.</li><li><h3 id="如何应对挑战"><a href="#如何应对挑战" class="headerlink" title="如何应对挑战"></a>如何应对挑战</h3>To hadle the bias from time-varying confounders-为了控制随着时间变化的混淆，CRN uses <strong>domain adversarial training</strong> to build <em>balancing representation</em> of the patient history.<blockquote><p>二元处理变量(t=1 or t=1),平衡混淆因素的目的是为了让混淆因素与治疗分配之间独立，现在是为了让每一个时间步上，构建一个治疗不变表示，消除患者历史与治疗分配之间的关联，从而可以可靠的用来反事实估计。</p></blockquote></li><li><h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3>on a simulated model of tumor growth (在一个肿瘤生成的模拟模型上)</li></ul><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><ol><li>in the static setting (很多方法使用静态设置下的观测数据进行因果推理)</li><li>estimating the effects of treatments over time poses unique opportunities:</li></ol><ul><li>diseases evolve under different treatment plans</li><li>how individual patients respond to medication over time</li><li>which are optimal timings for assignment treatments</li></ul><p><strong>providing new tools to improve clinical decision support systems</strong><br><em>the biggest challenge</em> involves correctly handling the time-dependent confounders: the covariates that are affected by past treatment which then influence future treatments and outcomes. (受过去治疗影响的协变量，进而影响未来的的治疗和结果)</p><blockquote><p>例子：协变量(白细胞数量)连续几个时间步超过正常范围，则给予治疗A.同时假设该病人协变量本身受到过去治疗B的影响。如果这些患者更可能死亡，没有调整时间依赖的混淆因素（如随时间变化的白细胞的数量），我们将错误的得出结论，认为治疗A对患者是有害的。此外，估计不同的治疗序列对患者的影响不仅仅需要调整当前步骤（治疗a）的偏差，还需要调整之前应用治疗B所引起的偏差。</p></blockquote><p>Time-dependent confounders are present in observational data because doctors follow policies: the history of the patients’ covariates and the patients’ response to past treatments are used to decide future treatments (Mansournia et al., 2012). The direct use of supervised learning methods will be biased by the treatment policies present in the observational data and will not be able to correctly estimate counterfactuals for different treatment assignment policies。</p><blockquote><p>医生在给患者分配未来治疗时会依据过去病人的协变量史以及对过去治疗的反应。直接使用监督的方式将收到观察数据中呈现的这种处理的影响，并且将无法正确估计不同处理分配政策下的反事实结果，导致某些区域的样本数量是稀疏的。</p></blockquote><p>进一步提出调整time-varying confounding和估计time-varying暴露的影响的标准方法是基于流行病学的想法，使用最广泛的就是Marginal Structural Models(MSMs),使用治疗加权的逆概率IPTW来调整时间依赖的混淆偏倚，但是方差比较大而且模型不稳定。<br>引入反事实循环网络CRN,一种新的序列到序列的架构用来估计治疗效应随时间的变化。使用了<strong>表征学习（representation learning）</strong>和<strong>领域对抗学习（domain adversarial training）</strong></p><blockquote><p><a href="https://blog.csdn.net/weixin_37993251/article/details/89398433">Domain-Adversarial Training of Neural Networks</a><br>目标是将零域自适应嵌入到学习表示的过程中去，使得最终的分类决策基于对领域变化既有<strong>鉴别性</strong>又有<strong>不变性</strong>的特征，即在源域和目标域中具有相同或者非常相似的分布。使得标签分类器的损失最小，域分类器的损失最大，从而鼓励在优化过程中出现鉴别性和域不变的特性。<br><img src=1.png width=100% /></p></blockquote><h3 id="the-H-divergence"><a href="#the-H-divergence" class="headerlink" title="the H-divergence"></a>the H-divergence</h3><p><img src=2.png width=100% />域分类错误率越高，说明H-divergence越小，代表着源域与目标域分布越接近。</p><p>Our main contribution are as floows:</p><ul><li>Treatment invariant representations over time:在每一个时间步构建不变的表示，以打破患者历史和治理分配之间的关联，从而消除对时间依赖性混淆因素的偏见。</li><li>Counterfactual estimation of future outcomes:估计治疗计划的反事实结果(而不仅仅是单一的治疗)。CRN由一个encoder network根据患者的历史记录构建治疗不变的表示从而初始化decoder。decoder在预期的未来处理序列下估计结果，同时更新平衡表示。<h4 id="CRN可以评估一些关键的医疗问题："><a href="#CRN可以评估一些关键的医疗问题：" class="headerlink" title="CRN可以评估一些关键的医疗问题："></a>CRN可以评估一些关键的医疗问题：</h4></li><li>when to give treatments to patients</li><li>when to start and stop treatment regimes</li><li>how to select from multiple treatments over time<img src=3.png width=100% /></li></ul><blockquote><p><font size=3>CRN在癌症治疗计划总的适用性。3位具有不同协变量和治疗历史的患者。对于当前时间，CRN可以预测未来计划治疗的反事实轨迹,通过反事实的预测可以决定哪种治疗方案能够给患者带来最好的结果。通过这种方式，CRN可以执行以下所有操作：选择最佳的治疗(a)，找到治疗最有效的时机(b)，决定何时停止治疗(c)</font></p></blockquote><h3 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h3><p><font size=3> 与本工作最相近的是 <em>Forecasting treatment responses over time using recurrent marginal structural networks</em>,但是RMSNs需要训练额外的rnn来估计倾向权重，并且不能客服IPTWs的基本问题，例如权重的高方差。相反，CRN利用了机器学习最新进展，特别是表示学习，提出了一种处理时变混淆的新方法。<br></font></p>]]></content>
+        <content type="html"><![CDATA[<h1 id="ESTIMATING-COUNTERFACTUAL-TREATMENT-OUTCOMES-OVER-TIME-THROUGH-ADVERSARIALLY-BALANCED-REPRESENTATIONS-通过对抗平衡表示来估计一段时间内的反事实治疗结果"><a href="#ESTIMATING-COUNTERFACTUAL-TREATMENT-OUTCOMES-OVER-TIME-THROUGH-ADVERSARIALLY-BALANCED-REPRESENTATIONS-通过对抗平衡表示来估计一段时间内的反事实治疗结果" class="headerlink" title="ESTIMATING COUNTERFACTUAL TREATMENT OUTCOMES OVER TIME THROUGH ADVERSARIALLY BALANCED REPRESENTATIONS (通过对抗平衡表示来估计一段时间内的反事实治疗结果)"></a>ESTIMATING COUNTERFACTUAL TREATMENT OUTCOMES OVER TIME THROUGH ADVERSARIALLY BALANCED REPRESENTATIONS (通过对抗平衡表示来估计一段时间内的反事实治疗结果)</h1><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><ul><li><h3 id="解决的问题："><a href="#解决的问题：" class="headerlink" title="解决的问题："></a>解决的问题：</h3></li></ul><ol><li>Identifying <strong>when</strong> to give treatments to patients</li><li>how to select among multiple treatment <strong>over time</strong></li></ol><ul><li><h3 id="提出模型："><a href="#提出模型：" class="headerlink" title="提出模型："></a>提出模型：</h3>Counterfactual Recurrent Neteork (RCN) to estimate treatment effects over time and answer such medical questions.</li><li><h3 id="如何应对挑战"><a href="#如何应对挑战" class="headerlink" title="如何应对挑战"></a>如何应对挑战</h3>To hadle the bias from time-varying confounders-为了控制随着时间变化的混淆，CRN uses <strong>domain adversarial training</strong> to build <em>balancing representation</em> of the patient history.<blockquote><p>二元处理变量(t=1 or t=1),平衡混淆因素的目的是为了让混淆因素与治疗分配之间独立，现在是为了让每一个时间步上，构建一个治疗不变表示，消除患者历史与治疗分配之间的关联，从而可以可靠的用来反事实估计。</p></blockquote></li><li><h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3>on a simulated model of tumor growth (在一个肿瘤生成的模拟模型上)</li></ul><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><ol><li>in the static setting (很多方法使用静态设置下的观测数据进行因果推理)</li><li>estimating the effects of treatments over time poses unique opportunities:</li></ol><ul><li>diseases evolve under different treatment plans</li><li>how individual patients respond to medication over time</li><li>which are optimal timings for assignment treatments</li></ul><p><strong>providing new tools to improve clinical decision support systems</strong><br><em>the biggest challenge</em> involves correctly handling the time-dependent confounders: the covariates that are affected by past treatment which then influence future treatments and outcomes. (受过去治疗影响的协变量，进而影响未来的的治疗和结果)</p><blockquote><p>例子：协变量(白细胞数量)连续几个时间步超过正常范围，则给予治疗A.同时假设该病人协变量本身受到过去治疗B的影响。如果这些患者更可能死亡，没有调整时间依赖的混淆因素（如随时间变化的白细胞的数量），我们将错误的得出结论，认为治疗A对患者是有害的。此外，估计不同的治疗序列对患者的影响不仅仅需要调整当前步骤（治疗a）的偏差，还需要调整之前应用治疗B所引起的偏差。</p></blockquote><p>Time-dependent confounders are present in observational data because doctors follow policies: the history of the patients’ covariates and the patients’ response to past treatments are used to decide future treatments (Mansournia et al., 2012). The direct use of supervised learning methods will be biased by the treatment policies present in the observational data and will not be able to correctly estimate counterfactuals for different treatment assignment policies。</p><blockquote><p>医生在给患者分配未来治疗时会依据过去病人的协变量史以及对过去治疗的反应。直接使用监督的方式将收到观察数据中呈现的这种处理的影响，并且将无法正确估计不同处理分配政策下的反事实结果，导致某些区域的样本数量是稀疏的。</p></blockquote><p>进一步提出调整time-varying confounding和估计time-varying暴露的影响的标准方法是基于流行病学的想法，使用最广泛的就是Marginal Structural Models(MSMs),使用治疗加权的逆概率IPTW来调整时间依赖的混淆偏倚，但是方差比较大而且模型不稳定。<br>引入反事实循环网络CRN,一种新的序列到序列的架构用来估计治疗效应随时间的变化。使用了<strong>表征学习（representation learning）</strong>和<strong>领域对抗学习（domain adversarial training）</strong></p><blockquote><p><a href="https://blog.csdn.net/weixin_37993251/article/details/89398433">Domain-Adversarial Training of Neural Networks</a><br>目标是将零域自适应嵌入到学习表示的过程中去，使得最终的分类决策基于对领域变化既有<strong>鉴别性</strong>又有<strong>不变性</strong>的特征，即在源域和目标域中具有相同或者非常相似的分布。使得标签分类器的损失最小，域分类器的损失最大，从而鼓励在优化过程中出现鉴别性和域不变的特性。<br><img src=1.png width=100% /></p></blockquote><h3 id="the-H-divergence"><a href="#the-H-divergence" class="headerlink" title="the H-divergence"></a>the H-divergence</h3><p><img src=2.png width=100% />域分类错误率越高，说明H-divergence越小，代表着源域与目标域分布越接近。</p><p>Our main contribution are as follows:</p><ul><li>Treatment invariant representations over time:在每一个时间步构建不变的表示，以打破患者历史和治理分配之间的关联，从而消除对时间依赖性混淆因素的偏见。</li><li>Counterfactual estimation of future outcomes:估计治疗计划的反事实结果(而不仅仅是单一的治疗)。CRN由一个encoder network根据患者的历史记录构建治疗不变的表示从而初始化decoder。decoder在预期的未来处理序列下估计结果，同时更新平衡表示。<h4 id="CRN可以评估一些关键的医疗问题："><a href="#CRN可以评估一些关键的医疗问题：" class="headerlink" title="CRN可以评估一些关键的医疗问题："></a>CRN可以评估一些关键的医疗问题：</h4></li><li>when to give treatments to patients</li><li>when to start and stop treatment regimes</li><li>how to select from multiple treatments over time<img src=3.png width=100% /></li></ul><blockquote><p><font size=3>CRN在癌症治疗计划总的适用性。3位具有不同协变量和治疗历史的患者。对于当前时间，CRN可以预测未来计划治疗的反事实轨迹,通过反事实的预测可以决定哪种治疗方案能够给患者带来最好的结果。通过这种方式，CRN可以执行以下所有操作：选择最佳的治疗(a)，找到治疗最有效的时机(b)，决定何时停止治疗(c)</font></p></blockquote><h3 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h3><p><font size=3> 与本工作最相近的是 <em>Forecasting treatment responses over time using recurrent marginal structural networks</em>,但是RMSNs需要训练额外的rnn来估计倾向权重，并且不能客服IPTWs的基本问题，例如权重的高方差。相反，CRN利用了机器学习最新进展，特别是表示学习，提出了一种处理时变混淆的新方法。<br></font> </p><h2 id="Problem-Formulation"><a href="#Problem-Formulation" class="headerlink" title="Problem Formulation"></a>Problem Formulation</h2><p><font size=3> 数据集描述：{${x^i_t,a^i_t,y^i_{t+1}} \cup V^i$}<br>时间依赖的混淆因素，每个时间步的处理，处理之后的结果，以及不随时间变化的协变量，比如性别以及基因信息等。需要注意的是下一时刻的结果将成为下一时刻协变量的一部分。<br>$Y[\bar a]$表示潜在结果，包含事实以及反事实结果在$\bar a$的情况下。让$\bar H_t=(\bar X_t,\bar{A_{t-1}},V)$代表$\bar X_t=(X_1,X_2,…,X_t)$ 治疗分配：$\bar A_t=(A_1,A_2,…,A_t)$ 和静态特征$V$,想要评估的是<br>$$\mathbb{E}(Y_{t+\tau}[\bar a(t,t+\tau -1)]| \mathbf{\bar H_t})$$<br>$\bar a(t,t+\tau +1)=[a_t,…,a_{t+\tau +1}]$代表从时间步t开始指导观测到潜在结果$ \mathbf{Y}_{t+\tau}$之前的可能处理序列。<br></font></p><h2 id="Counterfactual-Recurrent-Network"><a href="#Counterfactual-Recurrent-Network" class="headerlink" title="Counterfactual Recurrent Network"></a>Counterfactual Recurrent Network</h2><font size=3>Balancing representations:建议构建一个不能预测处理$A_t$的历史$\bar{H_t}$的表示。通过这种方式，消除历史和当前处理$\mathbf{A_t}$之间的关系。每个时间步的不同处理被认为是不同的域。$\Phi$为表示函数将患者的病史映射到表示空间$\mathcal{R}$,为了获得无偏的治疗效应，$\Phi$需要构造处理的不变表示例如$P(\Phi (\mathbf{\bar{H_t}}|\mathbf{A_t}=A_1)) = ... = P(\Phi (\mathbf{\bar{H_t}}|\mathbf{A_t}=A_K))$。在这里每个时间步的不同处理被认为是不同的领域。</font>]]></content>
       
       
       <categories>
@@ -59,31 +147,6 @@
         <tags>
             
             <tag> 闲记 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Hello World</title>
-      <link href="/2021/12/04/hello-world/"/>
-      <url>/2021/12/04/hello-world/</url>
-      
-        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 代码 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 工作 </tag>
             
         </tags>
       

@@ -1,0 +1,272 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>机器学习中常见的散度距离 | Technology Comes First</title><meta name="keywords" content="机器学习"><meta name="author" content="ScorpioBao"><meta name="copyright" content="ScorpioBao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="机器学习中的常见散度距离F-散度散度是用来衡量两个概率密度p，q区别的函数，即两个分布之间的相似程度：$$ D_f(p||q)&#x3D;\int q(x)f(\frac{p(x)}{q(x)})dx$$这里$f$需要满足2个条件：$f$是凸函数 $f(1)&#x3D;0$由Jensen不等式可知$E(f(x))&gt;&#x3D;f(E(x))$$$ D_f(p||q)&#x3D;\int q(x)f(\frac{p(x)}{q(x)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习中常见的散度距离">
+<meta property="og:url" content="http://example.com/2021/12/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%A3%E5%BA%A6%E8%B7%9D%E7%A6%BB/index.html">
+<meta property="og:site_name" content="Technology Comes First">
+<meta property="og:description" content="机器学习中的常见散度距离F-散度散度是用来衡量两个概率密度p，q区别的函数，即两个分布之间的相似程度：$$ D_f(p||q)&#x3D;\int q(x)f(\frac{p(x)}{q(x)})dx$$这里$f$需要满足2个条件：$f$是凸函数 $f(1)&#x3D;0$由Jensen不等式可知$E(f(x))&gt;&#x3D;f(E(x))$$$ D_f(p||q)&#x3D;\int q(x)f(\frac{p(x)}{q(x)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/tag.jpg">
+<meta property="article:published_time" content="2021-12-15T09:00:52.000Z">
+<meta property="article:modified_time" content="2021-12-16T06:49:43.334Z">
+<meta property="article:author" content="ScorpioBao">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/tag.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2021/12/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%A3%E5%BA%A6%E8%B7%9D%E7%A6%BB/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '机器学习中常见的散度距离',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-12-16 14:49:43'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/1.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-link"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/tag.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Technology Comes First</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-link"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">机器学习中常见的散度距离</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-15T09:00:52.000Z" title="发表于 2021-12-15 17:00:52">2021-12-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-16T06:49:43.334Z" title="更新于 2021-12-16 14:49:43">2021-12-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="机器学习中常见的散度距离"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="机器学习中的常见散度距离"><a href="#机器学习中的常见散度距离" class="headerlink" title="机器学习中的常见散度距离"></a>机器学习中的常见散度距离</h1><h2 id="F-散度"><a href="#F-散度" class="headerlink" title="F-散度"></a>F-散度</h2><p>散度是用来衡量两个概率密度p，q区别的函数，即两个分布之间的相似程度：<br>$$ D_f(p||q)=\int q(x)f(\frac{p(x)}{q(x)})dx$$<br>这里$f$需要满足2个条件：$f$是凸函数 $f(1)=0$<br>由Jensen不等式可知$E(f(x))&gt;=f(E(x))$<br>$$ D_f(p||q)=\int q(x)f(\frac{p(x)}{q(x)})dx \geq f(\int q(x)\frac{p(x)}{q(x)}dx)=f(1)=0$$</p>
+<h2 id="KL散度"><a href="#KL散度" class="headerlink" title="KL散度"></a>KL散度</h2><p>Kl散度是F-散度的一个特例，$f(x)=xlogx$的时候<br>$$D_{KL}(p||q)=p(x)log(\frac{p(x)}{q(x)})dx$$</p>
+<ul>
+<li>KL散度不满足对称性，并不是一个真正的距离度量</li>
+<li>KL散度不满足三角不等式</li>
+<li>范围$[0,+\infty]$<h2 id="JS散度"><a href="#JS散度" class="headerlink" title="JS散度"></a>JS散度</h2>JS散度是一种对称的衡量两个分布相似性的度量方式<br>$$D_{JS}(p||q)=\frac{1}{2}D_{KL}(p,m)+\frac{1}{2}D_{KL}(q,m)$$<br>其中$m=\frac{1}{2}(p+q)$</li>
+<li>范围$[0,log2]$ </li>
+</ul>
+<p><strong>JS散度以及KL散度都存在一个问题，就是如果两个分布P和q没有重叠或者重叠非常少时，KL散度和JS散度都很难衡量两个分布之间的距离，KL散度的值没有意义，JS散度的值一直是一个常数，这在学习算法中意味着这一点的梯度为0，导致梯度消失</strong></p>
+<h2 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a>交叉熵</h2><p>对于分布为$p(x)$的随机变量，熵$H(p)$表示其最优的编码长度，交叉熵是按照概率分布q的最优编码对真实分布为$p$的信息进行编码的长度，定义为<br>$$H(p,q)=E_p[-logq(x)])=-\sum_x p(x)logq(x)$$</p>
+<h2 id="距离"><a href="#距离" class="headerlink" title="距离"></a>距离</h2><p>首先满足距离度量的三个条件：</p>
+<ul>
+<li>正定性：若$x\not ={y}, d(x,y)&gt;0,d(x,x)=0$</li>
+<li>对称性：$d(x,y)=d(y,x)$</li>
+<li>三角不等式：$d(x,y)\leq d(x,z)+d(z,y)$</li>
+</ul>
+<h2 id="欧式距离"><a href="#欧式距离" class="headerlink" title="欧式距离"></a>欧式距离</h2><p>$$D_E(x,y)=\sqrt{(x-y)^T\mathbf{I}(x-y)}$$<br>其中$\mathbf{(I)}$为单位对角矩阵，<strong>欧式距离测量的是不同维度之间的独立性</strong><br>然而在很多情况下都不合理，例如身高和体重这两个不同维度的特性是有关联的，同时他们的尺度也是不相同的，为了克服上述两个问题就出现了马氏距离。</p>
+<h2 id="马氏距离"><a href="#马氏距离" class="headerlink" title="马氏距离"></a>马氏距离</h2><p>马氏距离考虑各种特征之间的关联，并且是尺度无关的，即独立于测量的尺度。<br>$$D_M(x,y)=\sqrt{(x-y)^T\Sigma^{-1}(x-y)}$$<br>其中$\Sigma$是多维随机变量的协方差矩阵。</p>
+<h2 id="Wasserstein距离"><a href="#Wasserstein距离" class="headerlink" title="Wasserstein距离"></a>Wasserstein距离</h2><p>对于两个分布$q_1,q_2$,$p^{th}-Wasserstein距离定义为$：<br>$$ W_p(q_1,q_2)=(\inf_{\gamma(x,y) \in \Gamma(q_1,q_2)}\mathbb{E}_{(x,y)\thicksim\gamma(x,y)}[d(x,y)^p])^{\frac{1}{p}}$$<br>其中$\Gamma(q_1,q_2)$ 是边际分布为$q_1$和$q_2$的所有可能的联合分布集合，从x搬到y的距离就是$d(x,y)$<br>Wasserstein距离比KL散度以及JS散度的优势在于：即使两个分布没有重叠或者重叠部分比较少，Wasserstein距离仍然能够反映两个分布之间的距离。  </p>
+<h2 id="MMD-Maximum-Mean-Discrepancy-最大均值差异"><a href="#MMD-Maximum-Mean-Discrepancy-最大均值差异" class="headerlink" title="MMD(Maximum Mean Discrepancy)最大均值差异"></a>MMD(Maximum Mean Discrepancy)最大均值差异</h2><p>对于一些复杂的、高维的随机变量，我们无法给出它们的分布函数，此时可以使用<em>矩</em>来描述一个随机变量，如果两个分布的均值和方差都相同的话，它们应该是比较相似的，但是很明显，均值和方差并不能完全代表一个分布，这个时候就需要更高阶的矩来描述一个分布。<br>MMD的基本思想就是如果两个随机变量的任一阶都相同的话，那么两个分布就是一致的。而当两个分布不相同的话，那么使得两个分布之间差异最大的那个矩应该被用来度量两个分布的标准。<br>定义如下：<br>$$MMD[F,p,q]=\sup_{||f||_\mathcal{H}\leq1}E_p[f(x)]-E_q[f(y)]$$<br>函数$f$在再生希尔伯特空间中的范数应该小于等于1.<br>如何获得一个随机变量的高阶矩呢？使用<strong>核函数</strong>。<br>比如在SVM中有高斯核函数，它对应的映射函数敲好可以映射到无穷维上，映射到无穷维上再求期望，正好可以得到随机变量的高阶矩，这个方法叫做<em>kernel embeeding of distribution</em>,也可以理解为将一个分布映射到再生希尔伯特空间上的一个点(每一个核函数都对应一个RKHS)，<strong>这样两个分布之间的距离就可以用两个点的内积进行表示</strong>。<br><img src=Snipaste_2021-12-15_21-45-42.png width=80% /><br>那么随机变量经过映射$f$之后，期望就可以表示为：<br><img src=Snipaste_2021-12-15_21-56-41.png width=80% /><br>第二个等号利用的是RKHS的再生性，就是RKHS中的$f(x)$都可以写成一个无穷维的向量$k(x,.)$与基底向量$f$的内积；第三个等号利用的是内积的性质，最后一个等号$\mu_p$表示的就是<em>kernel mean embedding</em><br>$$\mu_p=\int_\mathcal{X}p(dx)k(x,.)$$<br>表示的意思就是将$x$利用$k(x,.)$映射刀到无穷维上，然后在每一个维度上都求期望。</p>
+<h2 id="MMD的数学简化"><a href="#MMD的数学简化" class="headerlink" title="MMD的数学简化"></a>MMD的数学简化</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/163839117">数学简化</a><br><img src=Snipaste_2021-12-16_09-54-56.png width=80%></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">ScorpioBao</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/12/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%A3%E5%BA%A6%E8%B7%9D%E7%A6%BB/">http://example.com/2021/12/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%A3%E5%BA%A6%E8%B7%9D%E7%A6%BB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Technology Comes First</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></div><div class="post_share"><div class="social-share" data-image="/img/tag.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2021/12/15/hello-world/"><img class="next-cover" src="/img/tag.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hello World</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/1.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">ScorpioBao</div><div class="author-info__description">所有的不平凡都来自平凡</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ScorpioBao"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">这是我的博客！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E6%95%A3%E5%BA%A6%E8%B7%9D%E7%A6%BB"><span class="toc-number">1.</span> <span class="toc-text">机器学习中的常见散度距离</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#F-%E6%95%A3%E5%BA%A6"><span class="toc-number">1.1.</span> <span class="toc-text">F-散度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#KL%E6%95%A3%E5%BA%A6"><span class="toc-number">1.2.</span> <span class="toc-text">KL散度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JS%E6%95%A3%E5%BA%A6"><span class="toc-number">1.3.</span> <span class="toc-text">JS散度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A4%E5%8F%89%E7%86%B5"><span class="toc-number">1.4.</span> <span class="toc-text">交叉熵</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%9D%E7%A6%BB"><span class="toc-number">1.5.</span> <span class="toc-text">距离</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AC%A7%E5%BC%8F%E8%B7%9D%E7%A6%BB"><span class="toc-number">1.6.</span> <span class="toc-text">欧式距离</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A9%AC%E6%B0%8F%E8%B7%9D%E7%A6%BB"><span class="toc-number">1.7.</span> <span class="toc-text">马氏距离</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Wasserstein%E8%B7%9D%E7%A6%BB"><span class="toc-number">1.8.</span> <span class="toc-text">Wasserstein距离</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MMD-Maximum-Mean-Discrepancy-%E6%9C%80%E5%A4%A7%E5%9D%87%E5%80%BC%E5%B7%AE%E5%BC%82"><span class="toc-number">1.9.</span> <span class="toc-text">MMD(Maximum Mean Discrepancy)最大均值差异</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MMD%E7%9A%84%E6%95%B0%E5%AD%A6%E7%AE%80%E5%8C%96"><span class="toc-number">1.10.</span> <span class="toc-text">MMD的数学简化</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/12/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%A3%E5%BA%A6%E8%B7%9D%E7%A6%BB/" title="机器学习中常见的散度距离"><img src="/img/tag.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="机器学习中常见的散度距离"/></a><div class="content"><a class="title" href="/2021/12/15/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%A3%E5%BA%A6%E8%B7%9D%E7%A6%BB/" title="机器学习中常见的散度距离">机器学习中常见的散度距离</a><time datetime="2021-12-15T09:00:52.000Z" title="发表于 2021-12-15 17:00:52">2021-12-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/15/hello-world/" title="Hello World"><img src="/img/tag.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello World"/></a><div class="content"><a class="title" href="/2021/12/15/hello-world/" title="Hello World">Hello World</a><time datetime="2021-12-15T08:52:40.389Z" title="发表于 2021-12-15 16:52:40">2021-12-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/09/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%9F%E5%AF%B9%E6%8A%97%E8%AE%AD%E7%BB%83/" title="神经网络域对抗训练"><img src="/img/tag.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="神经网络域对抗训练"/></a><div class="content"><a class="title" href="/2021/12/09/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%9F%E5%AF%B9%E6%8A%97%E8%AE%AD%E7%BB%83/" title="神经网络域对抗训练">神经网络域对抗训练</a><time datetime="2021-12-09T11:17:45.000Z" title="发表于 2021-12-09 19:17:45">2021-12-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/07/RNN/" title="RNN"><img src="/img/tag.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RNN"/></a><div class="content"><a class="title" href="/2021/12/07/RNN/" title="RNN">RNN</a><time datetime="2021-12-07T07:01:43.000Z" title="发表于 2021-12-07 15:01:43">2021-12-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/06/CRN-%E5%8F%8D%E4%BA%8B%E5%AE%9E%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="CRN-反事实循环神经网络"><img src="/img/tag.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CRN-反事实循环神经网络"/></a><div class="content"><a class="title" href="/2021/12/06/CRN-%E5%8F%8D%E4%BA%8B%E5%AE%9E%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="CRN-反事实循环神经网络">CRN-反事实循环神经网络</a><time datetime="2021-12-06T02:04:19.000Z" title="发表于 2021-12-06 10:04:19">2021-12-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By ScorpioBao</div><div class="footer_custom_text"><div class="icp"><img src="https://gitee.com/little-demon1/BlogImages/raw/master/icp.png" href="https://beian.miit.gov.cn">苏ICP备2021009120号</span></a></div></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script><script>function addGitalkSource () {
+  const ele = document.createElement('link')
+  ele.rel = 'stylesheet'
+  ele.href= 'https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css'
+  document.getElementsByTagName('head')[0].appendChild(ele)
+}
+
+function loadGitalk () {
+  function initGitalk () {
+    var gitalk = new Gitalk(Object.assign({
+      clientID: '16de1d7945b4c60d2a4d',
+      clientSecret: 'bd8347265d97a63bd738d3db8564bb2e40a2e0a4',
+      repo: 'scorpiobao.github.io',
+      owner: 'ScorpioBao',
+      admin: ['ScorpioBao'],
+      id: '8f533423193772b88d5ce7c3fff546de',
+      language: 'en',
+      perPage: 10,
+      distractionFreeMode: false,
+      pagerDirection: 'last',
+      createIssueManually: true,
+      updateCountCallback: commentCount
+    },null))
+
+    gitalk.render('gitalk-container')
+  }
+
+  if (typeof Gitalk === 'function') initGitalk()
+  else {
+    addGitalkSource()
+    getScript('https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js').then(initGitalk)
+  }
+}
+
+function commentCount(n){
+  let isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+  if (isCommentCount) {
+    isCommentCount.innerHTML= n
+  }
+}
+
+if ('Gitalk' === 'Gitalk' || !true) {
+  if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+  else loadGitalk()
+} else {
+  function loadOtherComment () {
+    loadGitalk()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
